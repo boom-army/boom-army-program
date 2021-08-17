@@ -14,9 +14,10 @@ describe("sosol-tests", () => {
 
   let mint = null;
   let god = null;
-  let consumerAcc = anchor.web3.Keypair.generate();
   let creatorAcc = anchor.web3.Keypair.generate();
+  let creatorTokenAcc = null;
   let storageAcc = anchor.web3.Keypair.generate();
+  let storageTokenAcc = null;
 
   it("Sets up initial test state", async () => {
     const [_mint, _god] = await serumCmn.createMintAndVault(
@@ -28,21 +29,13 @@ describe("sosol-tests", () => {
     mint = _mint;
     god = _god;
 
-    await program.provider.connection.requestAirdrop(consumerAcc.publicKey, 10000000),
-
-    await serumCmn.createTokenAccount(
-      program.provider,
-      mint,
-      consumerAcc.publicKey
-    );
-
-    await serumCmn.createTokenAccount(
+    creatorTokenAcc =await serumCmn.createTokenAccount(
       program.provider,
       mint,
       creatorAcc.publicKey
     );
 
-    await serumCmn.createTokenAccount(
+    storageTokenAcc = await serumCmn.createTokenAccount(
       program.provider,
       mint,
       storageAcc.publicKey
@@ -54,35 +47,33 @@ describe("sosol-tests", () => {
     const owner = program.provider.wallet.publicKey;
 
     console.log('*************', {
-      from: consumerAcc.publicKey.toBase58(),
-      to: creatorAcc.publicKey.toBase58(),
-      toStorageAccount: storageAcc.publicKey.toBase58(),
+      from: god.toBase58(),
+      to: creatorTokenAcc.toBase58(),
+      toStorageAccount: storageTokenAcc.toBase58(),
       tokenProgram: TOKEN_PROGRAM_ID.toBase58(),
       programId: program.programId.toBase58(),
     });
 
-    const myAccount = creatorAcc;
+    // const myAccount = creatorAcc;
 
-    await program.rpc.initialize(new anchor.BN(1234), {
-      accounts: {
-        myAccount: myAccount.publicKey,
-        rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-      },
-      signers: [myAccount],
-      instructions: [await program.account.myAccount.createInstruction(myAccount)],
-    });
-
-    // await program.rpc.interaction(new anchor.BN(INTERACTION_FEE), {
+    // await program.rpc.initialize(new anchor.BN(1234), {
     //   accounts: {
-    //     from: program.provider.wallet.publicKey,
-    //     to: creatorAcc.publicKey,
-    //     toStorageAccount: storageAcc.publicKey,
-    //     owner: program.provider.wallet.publicKey,
-    //     tokenProgram: TOKEN_PROGRAM_ID,
-    //     interactionFee: INTERACTION_FEE,
+    //     myAccount: myAccount.publicKey,
+    //     rent: anchor.web3.SYSVAR_RENT_PUBKEY,
     //   },
-    //   signers: [owner],
+    //   signers: [myAccount],
+    //   instructions: [await program.account.myAccount.createInstruction(myAccount)],
     // });
+
+    await program.rpc.interaction(new anchor.BN(INTERACTION_FEE), {
+      accounts: {
+        from: god,
+        to: creatorTokenAcc,
+        toStorageAccount: storageTokenAcc,
+        owner: program.provider.wallet.publicKey,
+        tokenProgram: TOKEN_PROGRAM_ID,
+      },
+    });
 
     // let _initializerTokenAccountA = await mintA.getAccountInfo(initializerTokenAccountA);
 
