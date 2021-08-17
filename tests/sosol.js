@@ -8,14 +8,13 @@ describe("sosol-tests", () => {
   anchor.setProvider(anchor.Provider.env());
 
   const program = anchor.workspace.Sosol;
-  console.log('*******************', program);
 
   const MINT_TOKENS = 4200000000000000; // 42M with 8dp
   const MINT_DECIMALS = 8;
 
   let mint = null;
   let god = null;
-  let consumerAcc = null;
+  let consumerAcc = anchor.web3.Keypair.generate();
   let creatorAcc = anchor.web3.Keypair.generate();
   let storageAcc = anchor.web3.Keypair.generate();
 
@@ -29,7 +28,13 @@ describe("sosol-tests", () => {
     mint = _mint;
     god = _god;
 
-    consumerAcc = god;
+    await program.provider.connection.requestAirdrop(consumerAcc.publicKey, 10000000),
+
+    await serumCmn.createTokenAccount(
+      program.provider,
+      mint,
+      consumerAcc.publicKey
+    );
 
     await serumCmn.createTokenAccount(
       program.provider,
@@ -49,10 +54,9 @@ describe("sosol-tests", () => {
     const owner = program.provider.wallet.publicKey;
 
     console.log('*************', {
-      from: program.provider.wallet.publicKey.toBase58(),
+      from: consumerAcc.publicKey.toBase58(),
       to: creatorAcc.publicKey.toBase58(),
       toStorageAccount: storageAcc.publicKey.toBase58(),
-      owner: program.provider.wallet.publicKey.toBase58(),
       tokenProgram: TOKEN_PROGRAM_ID.toBase58(),
       programId: program.programId.toBase58(),
     });
