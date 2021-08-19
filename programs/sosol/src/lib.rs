@@ -8,22 +8,17 @@ use std::convert::Into;
 pub mod sosol {
     use super::*;
 
-    // pub fn initialize(ctx: Context<Initialize>, data: u64) -> ProgramResult {
-    //     let my_account = &mut ctx.accounts.my_account;
-    //     my_account.data = data;
-    //     Ok(())
-    // }
-
     pub fn interaction(ctx: Context<Interaction>, interaction_fee: u64) -> ProgramResult {
         // const STORAGE_PERCENT_SPLIT: usize = 10;
-        // let cpi_accounts = Transfer {
-        //     from: ctx.accounts.from.to_account_info().clone(),
-        //     to: ctx.accounts.to.to_account_info().clone(),
-        //     authority: ctx.accounts.owner.clone(),
-        // };
-        // let cpi_program = ctx.accounts.token_program.clone();
-        // let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
-        // token::transfer(cpi_ctx, interaction_fee)?;
+        // Transfer funds to the check.
+        let cpi_accounts = Transfer {
+            from: ctx.accounts.from.to_account_info().clone(),
+            to: ctx.accounts.to.to_account_info().clone(),
+            authority: ctx.accounts.owner.clone(),
+        };
+        let cpi_program = ctx.accounts.token_program.clone();
+        let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
+        token::transfer(cpi_ctx, interaction_fee)?;
         // let to = ctx.accounts.to.to_account_info().clone().key;
         // let from = ctx.accounts.from.to_account_info().clone().key;
         // let owner = ctx.accounts.owner.to_account_info().clone().key;
@@ -77,36 +72,18 @@ pub mod sosol {
     }
 }
 
-// #[derive(Accounts)]
-// pub struct Initialize<'info> {
-//     #[account(init)]
-//     pub my_account: ProgramAccount<'info, MyAccount>,
-// }
-
 #[derive(Accounts)]
 pub struct Interaction<'info> {
     #[account(mut, has_one = owner)]
     from: CpiAccount<'info, TokenAccount>,
-    #[account("from.mint == to.mint")]
+    #[account(mut, "from.mint == to.mint")]
     to: CpiAccount<'info, TokenAccount>,
     #[account("from.mint == to_storage_account.mint")]
     to_storage_account: CpiAccount<'info, TokenAccount>,
+    #[account(signer)]
     owner: AccountInfo<'info>,
     token_program: AccountInfo<'info>,
 }
-
-// #[account]
-// pub struct MyAccount {
-//     pub data: u64,
-// }
-
-// #[account]
-// pub struct SosolAccount {
-//     from: Pubkey,
-//     to: Pubkey,
-//     to_storage_account: Pubkey,
-//     interaction_fee: u64,
-// }
 
 #[error]
 pub enum ErrorCode {

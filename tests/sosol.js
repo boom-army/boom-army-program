@@ -43,8 +43,7 @@ describe("sosol-tests", () => {
   });
 
   it("Actions an interaction", async () => {
-    const INTERACTION_FEE = 1000;
-    const owner = program.provider.wallet.publicKey;
+    const INTERACTION_FEE = 1000000;
 
     console.log('*************', {
       from: god.toBase58(),
@@ -54,17 +53,6 @@ describe("sosol-tests", () => {
       programId: program.programId.toBase58(),
     });
 
-    // const myAccount = creatorAcc;
-
-    // await program.rpc.initialize(new anchor.BN(1234), {
-    //   accounts: {
-    //     myAccount: myAccount.publicKey,
-    //     rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-    //   },
-    //   signers: [myAccount],
-    //   instructions: [await program.account.myAccount.createInstruction(myAccount)],
-    // });
-
     await program.rpc.interaction(new anchor.BN(INTERACTION_FEE), {
       accounts: {
         from: god,
@@ -72,7 +60,7 @@ describe("sosol-tests", () => {
         toStorageAccount: storageTokenAcc,
         owner: program.provider.wallet.publicKey,
         tokenProgram: TOKEN_PROGRAM_ID,
-      },
+      }
     });
 
     // let _initializerTokenAccountA = await mintA.getAccountInfo(initializerTokenAccountA);
