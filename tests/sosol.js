@@ -43,15 +43,15 @@ describe("sosol-tests", () => {
   });
 
   it("Actions an interaction", async () => {
-    const INTERACTION_FEE = 96587373;
+    const INTERACTION_FEE = 10000000;
 
-    console.log('*************', {
-      from: god.toBase58(),
-      to: creatorTokenAcc.toBase58(),
-      toStorageAccount: storageTokenAcc.toBase58(),
-      tokenProgram: TOKEN_PROGRAM_ID.toBase58(),
-      programId: program.programId.toBase58(),
-    });
+    // console.log('*************', {
+    //   from: god.toBase58(),
+    //   to: creatorTokenAcc.toBase58(),
+    //   toStorageAccount: storageTokenAcc.toBase58(),
+    //   tokenProgram: TOKEN_PROGRAM_ID.toBase58(),
+    //   programId: program.programId.toBase58(),
+    // });
 
     await program.rpc.interaction(new anchor.BN(INTERACTION_FEE), {
       accounts: {
@@ -63,27 +63,18 @@ describe("sosol-tests", () => {
       }
     });
 
-    // let _initializerTokenAccountA = await mintA.getAccountInfo(initializerTokenAccountA);
+    // assert.ok(checkAccount.from.equals(god));
+    // assert.ok(checkAccount.to.equals(receiver));
+    // assert.ok(checkAccount.amount.eq(new anchor.BN(100)));
+    // assert.ok(checkAccount.memo === "Hello world");
+    // assert.ok(checkAccount.vault.equals(vault.publicKey));
+    // assert.ok(checkAccount.nonce === nonce);
+    // assert.ok(checkAccount.burned === false);
 
-    // const account = await program.account.myAccount.fetch(myAccount.publicKey);
-
-    // console.log('****************', account);
-
-    // Check it's state was initialized.
-    // assert.ok(account.data.eq(new anchor.BN(1234)));
-
-    // Check that the new owner is the PDA.
-    // assert.ok(_initializerTokenAccountA.owner.equals(pda));
-
-    // // Check that the values in the escrow account match what we expect.
-    // assert.ok(_escrowAccount.initializerKey.equals(provider.wallet.publicKey));
-    // assert.ok(_escrowAccount.initializerAmount.toNumber() == initializerAmount);
-    // assert.ok(_escrowAccount.takerAmount.toNumber() == takerAmount);
-    // assert.ok(
-    //   _escrowAccount.initializerDepositTokenAccount.equals(initializerTokenAccountA)
+    // let vaultAccount = await serumCmn.getTokenAccount(
+    //   program.provider,
+    //   checkAccount.vault
     // );
-    // assert.ok(
-    //   _escrowAccount.initializerReceiveTokenAccount.equals(initializerTokenAccountB)
-    // );
+    // assert.ok(vaultAccount.amount.eq(new anchor.BN(100)));
   });
 });

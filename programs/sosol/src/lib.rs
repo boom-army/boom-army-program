@@ -21,6 +21,11 @@ pub mod sosol {
         let from = ctx.accounts.from.to_account_info().clone();
         let owner = ctx.accounts.owner.to_account_info().clone();
 
+        // Check account has funds
+        if ctx.accounts.from.amount < interaction_fee {
+            return Err(ErrorCode::NotEnoughTokens.into());
+        }
+
         // Transfer funds to the content creator
         let cpi_accounts = Transfer {
             from,
@@ -43,9 +48,7 @@ pub mod sosol {
         let cpi_program = ctx.accounts.token_program.clone();
         let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
         token::transfer(cpi_ctx, storage_fee)?;
-        
-        // Feeling verified. Might implement this later.
-        // let from_account_balance = token::accessor::amount(from)?;
+
         Ok(())
     }
 }
@@ -65,7 +68,7 @@ pub struct Interaction<'info> {
 
 #[error]
 pub enum ErrorCode {
-    #[msg("The derived interaction signer does not match that which was given.")]
-    InvalidInteractionSigner,
+    #[msg("The token account doesn't have enough funds to make this transaction.")]
+    NotEnoughTokens,
 }
 
