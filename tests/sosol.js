@@ -43,7 +43,7 @@ describe("sosol-tests", () => {
   });
 
   it("Actions an interaction", async () => {
-    const INTERACTION_FEE = 1000000;
+    const INTERACTION_FEE = 96587373;
 
     console.log('*************', {
       from: god.toBase58(),

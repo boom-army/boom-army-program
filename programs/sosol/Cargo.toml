@@ -18,3 +18,4 @@ default = []
 anchor-lang = "0.13.2"
 anchor-spl = { version = "0.13.2" }
 spl-token = { version = "3.1.1", features = ["no-entrypoint"] }
+percentage = "0.1.0"
