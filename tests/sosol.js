@@ -65,16 +65,13 @@ describe("sosol-tests", () => {
 
     // assert.ok(checkAccount.from.equals(god));
     // assert.ok(checkAccount.to.equals(receiver));
-    // assert.ok(checkAccount.amount.eq(new anchor.BN(100)));
-    // assert.ok(checkAccount.memo === "Hello world");
-    // assert.ok(checkAccount.vault.equals(vault.publicKey));
-    // assert.ok(checkAccount.nonce === nonce);
-    // assert.ok(checkAccount.burned === false);
+    // assert.ok(checkAccount.interactionFee.eq(new anchor.BN(INTERACTION_FEE)));
+    // assert.ok(checkAccount.owner.equals(program.provider.wallet.publicKey));
 
-    // let vaultAccount = await serumCmn.getTokenAccount(
+    // let toAccount = await serumCmn.getTokenAccount(
     //   program.provider,
-    //   checkAccount.vault
+    //   creatorTokenAcc
     // );
-    // assert.ok(vaultAccount.amount.eq(new anchor.BN(100)));
+    // assert.ok(toAccount.amount.eq(new anchor.BN(INTERACTION_FEE)));
   });
 });
