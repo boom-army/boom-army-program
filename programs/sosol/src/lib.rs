@@ -11,7 +11,7 @@ pub mod sosol {
 
     pub fn interaction(ctx: Context<Interaction>, interaction_fee: u64) -> ProgramResult {
         // Set storage percent split between accounts
-        const STORAGE_PERCENT_SPLIT: usize = 10;
+        const STORAGE_PERCENT_SPLIT: usize = 3;
 
         let storage_percent = Percentage::from(STORAGE_PERCENT_SPLIT);
         let storage_fee = storage_percent.apply_to(interaction_fee);
