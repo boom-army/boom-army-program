@@ -5,6 +5,8 @@ use anchor_spl::token::{self, TokenAccount, Transfer};
 use std::convert::Into;
 use percentage::Percentage;
 
+// declare_id!("soso1vCmdxwEZqU47M4NZ4MxZH19ppgqF1auG7dP3wz");
+
 #[program]
 pub mod sosol {
     use super::*;
