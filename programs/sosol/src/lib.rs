@@ -1,17 +1,18 @@
-//! Sosol intereaction
+//! Sosol interaction
 
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, TokenAccount, Transfer};
 use std::convert::Into;
 use percentage::Percentage;
+use solana_program::{declare_id};
 
-// declare_id!("soso1vCmdxwEZqU47M4NZ4MxZH19ppgqF1auG7dP3wz");
+declare_id!("8Ea7iXE3UstZTtH8EfkvQRSHsn2KF76Z3wx4kbdtqrjN");
 
 #[program]
 pub mod sosol {
     use super::*;
 
-    pub fn interaction(ctx: Context<Interaction>, interaction_fee: u64) -> ProgramResult {
+    pub fn interaction(_ctx: Context<Interaction>, interaction_fee: u64) -> ProgramResult {
         // Set storage percent split between accounts
         const STORAGE_PERCENT_SPLIT: usize = 3;
 
@@ -19,12 +20,12 @@ pub mod sosol {
         let storage_fee = storage_percent.apply_to(interaction_fee);
         let creator_fee = interaction_fee - storage_fee;
 
-        let to = ctx.accounts.to.to_account_info().clone();
-        let from = ctx.accounts.from.to_account_info().clone();
-        let owner = ctx.accounts.owner.to_account_info().clone();
+        let to = _ctx.accounts.to.to_account_info().clone();
+        let from = _ctx.accounts.from.to_account_info().clone();
+        let owner = _ctx.accounts.owner.to_account_info().clone();
 
         // Check account has funds
-        if ctx.accounts.from.amount < interaction_fee {
+        if _ctx.accounts.from.amount < interaction_fee {
             return Err(ErrorCode::NotEnoughTokens.into());
         }
 
@@ -34,20 +35,20 @@ pub mod sosol {
             to,
             authority: owner,
         };
-        let cpi_program = ctx.accounts.token_program.clone();
+        let cpi_program = _ctx.accounts.token_program.clone();
         let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
         token::transfer(cpi_ctx, creator_fee)?;
 
         // Transfer funds to the content storage host
-        let to_storage = ctx.accounts.to_storage_account.to_account_info().clone();
-        let from_2 = ctx.accounts.from.to_account_info().clone();
-        let owner_2 = ctx.accounts.owner.to_account_info().clone();
+        let to_storage = _ctx.accounts.to_storage_account.to_account_info().clone();
+        let from_2 = _ctx.accounts.from.to_account_info().clone();
+        let owner_2 = _ctx.accounts.owner.to_account_info().clone();
         let cpi_accounts = Transfer {
             from: from_2,
             to: to_storage,
             authority: owner_2,
         };
-        let cpi_program = ctx.accounts.token_program.clone();
+        let cpi_program = _ctx.accounts.token_program.clone();
         let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
         token::transfer(cpi_ctx, storage_fee)?;
 
@@ -59,9 +60,9 @@ pub mod sosol {
 pub struct Interaction<'info> {
     #[account(mut, has_one = owner)]
     from: CpiAccount<'info, TokenAccount>,
-    #[account(mut, "from.mint == to.mint")]
+    #[account(mut, constraint = from.mint == to.mint)]
     to: CpiAccount<'info, TokenAccount>,
-    #[account(mut, "from.mint == to_storage_account.mint")]
+    #[account(mut, constraint = from.mint == to_storage_account.mint)]
     to_storage_account: CpiAccount<'info, TokenAccount>,
     #[account(signer)]
     owner: AccountInfo<'info>,
