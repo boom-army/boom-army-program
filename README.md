@@ -5,4 +5,4 @@
 - anchor test --skip-local-validator
 - spl-token create-token /path/to/keypair.json
 - spl-token create-account soso1vCmdxwEZqU47M4NZ4MxZH19ppgqF1auG7dP3wz
-- spl-token mint soso1vCmdxwEZqU47M4NZ4MxZH19ppgqF1auG7dP3wz 42000000
+- spl-token mint soso1vCmdxwEZqU47M4NZ4MxZH19ppgqF1auG7dP3wz 420000000
