@@ -1,5 +1,7 @@
 const anchor = require("@project-serum/anchor");
 const serumCmn = require("@project-serum/common");
+const { Token } = require("@solana/spl-token");
+const assert = require("assert");
 
 const { TOKEN_PROGRAM_ID } = require("@solana/spl-token");
 
@@ -29,7 +31,7 @@ describe("sosol-tests", () => {
     mint = _mint;
     god = _god;
 
-    creatorTokenAcc =await serumCmn.createTokenAccount(
+    creatorTokenAcc = await serumCmn.createTokenAccount(
       program.provider,
       mint,
       creatorAcc.publicKey
@@ -60,18 +62,22 @@ describe("sosol-tests", () => {
         toStorageAccount: storageTokenAcc,
         owner: program.provider.wallet.publicKey,
         tokenProgram: TOKEN_PROGRAM_ID,
-      }
+      },
     });
 
     // assert.ok(checkAccount.from.equals(god));
     // assert.ok(checkAccount.to.equals(receiver));
-    // assert.ok(checkAccount.interactionFee.eq(new anchor.BN(INTERACTION_FEE)));
     // assert.ok(checkAccount.owner.equals(program.provider.wallet.publicKey));
 
-    // let toAccount = await serumCmn.getTokenAccount(
-    //   program.provider,
-    //   creatorTokenAcc
-    // );
-    // assert.ok(toAccount.amount.eq(new anchor.BN(INTERACTION_FEE)));
+    const sosolMint = new Token(
+      program.provider.connection,
+      mint,
+      TOKEN_PROGRAM_ID,
+      program.provider.wallet.publicKey // node only
+    );
+    const toAcc = await sosolMint.getAccountInfo(creatorTokenAcc);
+    const storageAcc = await sosolMint.getAccountInfo(storageTokenAcc);
+
+    assert.ok(new anchor.BN(INTERACTION_FEE).eq(toAcc.amount.add(storageAcc.amount)));
   });
 });
