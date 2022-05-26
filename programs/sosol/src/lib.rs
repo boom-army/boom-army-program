@@ -4,7 +4,6 @@ use anchor_lang::prelude::*;
 use anchor_spl::token::{self, TokenAccount, Transfer};
 use std::convert::Into;
 use percentage::Percentage;
-use solana_program::{declare_id};
 
 declare_id!("8Ea7iXE3UstZTtH8EfkvQRSHsn2KF76Z3wx4kbdtqrjN");
 
@@ -12,13 +11,14 @@ declare_id!("8Ea7iXE3UstZTtH8EfkvQRSHsn2KF76Z3wx4kbdtqrjN");
 pub mod sosol {
     use super::*;
 
-    pub fn interaction(_ctx: Context<Interaction>, interaction_fee: u64) -> ProgramResult {
+    pub fn interaction(_ctx: Context<Interaction>, interaction_fee: u64) -> Result<()> {
         // Set storage percent split between accounts
         const STORAGE_PERCENT_SPLIT: usize = 3;
 
         let storage_percent = Percentage::from(STORAGE_PERCENT_SPLIT);
         let storage_fee = storage_percent.apply_to(interaction_fee);
-        let creator_fee = interaction_fee - storage_fee;
+        // Safely subtract value avoiding underflow
+        let creator_fee = interaction_fee.saturating_sub(storage_fee);
 
         let to = _ctx.accounts.to.to_account_info().clone();
         let from = _ctx.accounts.from.to_account_info().clone();
@@ -26,7 +26,7 @@ pub mod sosol {
 
         // Check account has funds
         if _ctx.accounts.from.amount < interaction_fee {
-            return Err(ErrorCode::NotEnoughTokens.into());
+            return Err(ContractError::NotEnoughTokens.into());
         }
 
         // Transfer funds to the content creator
@@ -59,19 +59,19 @@ pub mod sosol {
 #[derive(Accounts)]
 pub struct Interaction<'info> {
     #[account(mut, has_one = owner)]
-    from: CpiAccount<'info, TokenAccount>,
+    pub from: Account<'info, TokenAccount>,
     #[account(mut, constraint = from.mint == to.mint)]
-    to: CpiAccount<'info, TokenAccount>,
+    pub to: Account<'info, TokenAccount>,
     #[account(mut, constraint = from.mint == to_storage_account.mint)]
-    to_storage_account: CpiAccount<'info, TokenAccount>,
+    pub to_storage_account: Account<'info, TokenAccount>,
     #[account(signer)]
     owner: AccountInfo<'info>,
     token_program: AccountInfo<'info>,
 }
 
-#[error]
-pub enum ErrorCode {
+#[error_code]
+pub enum ContractError {
     #[msg("The token account doesn't have enough funds to make this transaction.")]
-    NotEnoughTokens,
+    NotEnoughTokens
 }
 
