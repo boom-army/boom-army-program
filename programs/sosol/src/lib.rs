@@ -75,3 +75,16 @@ pub enum ContractError {
     NotEnoughTokens
 }
 
+security_txt! {
+    name: "Boom.Army",
+    project_url: "https://boom.army",
+    contacts: "email:3zy3[at]protonmail.ch",
+    policy: "https://github.com/boom-army/boom-army-program/blob/main/SECURITY.md",
+    preferred_languages: "en",
+    source_code: "https://github.com/boom-army/boom-army-program",
+    auditors: "None",
+    acknowledgements: "
+The following hackers could've stolen all our money but didn't: 
+- @r2djo
+"
+}

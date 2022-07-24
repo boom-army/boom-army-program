@@ -1,7 +1,7 @@
 ## Useful commands
 
 - anchor deploy --provider.cluster devnet // !!!! this will reset the Program Id
-- anchor build - then use solana deploy
+- anchor build - then use solana deploy (use --verifiable flag to build verified)
 - anchor test --skip-local-validator
 - spl-token create-token /path/to/keypair.json
 - spl-token create-account boomh1LQnwDnHtKxWTFgxcbdRjPypRSjdwxkAEJkFSH
