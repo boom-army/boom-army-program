@@ -8,6 +8,10 @@
 - spl-token create-account boomh1LQnwDnHtKxWTFgxcbdRjPypRSjdwxkAEJkFSH
 - spl-token mint boomh1LQnwDnHtKxWTFgxcbdRjPypRSjdwxkAEJkFSH 420000000
 
+### Initiate anchor idl
+
+`anchor idl init -f 'sosol-program/target/idl/boom.json' BooManQtsP9pBNudF2HDGNT9xkjL63BiWVWpfkvLkmQW --provider.cluster mainnet`
+
 ## Program
 
 The program ID is `BooManQtsP9pBNudF2HDGNT9xkjL63BiWVWpfkvLkmQW` and the key has been backed up to ensure that it will remain so in all future deployments.
