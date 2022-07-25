@@ -1,18 +1,20 @@
-[registry]
-url = "https://anchor.projectserum.com"
+anchor_version = "0.24.2"
 
 [provider]
-cluster = "localnet"
+cluster = "mainnet"
 wallet = "~/.config/solana/id.json"
 
 [programs.localnet]
-my_program = "BooManQtsP9pBNudF2HDGNT9xkjL63BiWVWpfkvLkmQW"
+boom = "BooManQtsP9pBNudF2HDGNT9xkjL63BiWVWpfkvLkmQW"
 
 [programs.devnet]
-my_program = "BooManQtsP9pBNudF2HDGNT9xkjL63BiWVWpfkvLkmQW"
+boom = "BooManQtsP9pBNudF2HDGNT9xkjL63BiWVWpfkvLkmQW"
 
 [programs.mainnet]
-my_program = "BooManQtsP9pBNudF2HDGNT9xkjL63BiWVWpfkvLkmQW"
+boom = "BooManQtsP9pBNudF2HDGNT9xkjL63BiWVWpfkvLkmQW"
+
+[registry]
+url = "https://anchor.projectserum.com"
 
 [scripts]
 test = "mocha -t 1000000 tests/"

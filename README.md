@@ -21,4 +21,4 @@ The program ID is `BooManQtsP9pBNudF2HDGNT9xkjL63BiWVWpfkvLkmQW` and the key has
 
 ### Verify program
 
-Verify the program is correct using `anchor verify --provider.cluster devnet -p boom BooManQtsP9pBNudF2HDGNT9xkjL63BiWVWpfkvLkmQW`
+Verify the program is correct using `anchor verify -p boom BooManQtsP9pBNudF2HDGNT9xkjL63BiWVWpfkvLkmQW --provider.cluster mainnet`
