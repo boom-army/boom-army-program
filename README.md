@@ -12,7 +12,9 @@
 
 The program ID is `BooManQtsP9pBNudF2HDGNT9xkjL63BiWVWpfkvLkmQW` and the key has been backed up to ensure that it will remain so in all future deployments.
 
-- key stored in `sosol-program/target/deploy/boom-keypair.json`
+- key stored in `sosol-program/target/verifiable/boom-keypair.json`
 - Can be overidden with `solana program deploy --program-id <KEYPAIR_FILEPATH> <PROGRAM_FILEPATH>`
 
-### Verify program 
+### Verify program
+
+Verify the program is correct using `anchor verify --provider.cluster devnet -p boom BooManQtsP9pBNudF2HDGNT9xkjL63BiWVWpfkvLkmQW`
