@@ -1,7 +1,7 @@
 ## Useful commands
 
 - anchor deploy --provider.cluster devnet // !!!! this will reset the Program Id
-- anchor build - then use solana deploy (use --verifiable flag to build a consistent with the docker image)
+- anchor build -v (use --verifiable flag to build a consistent with the docker image)
 - solana program deploy 'sosol-program/target/verifiable/boom.so'
 - anchor test --skip-local-validator
 - spl-token create-token /path/to/keypair.json
