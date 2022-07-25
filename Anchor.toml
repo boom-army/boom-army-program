@@ -3,7 +3,16 @@ url = "https://anchor.projectserum.com"
 
 [provider]
 cluster = "localnet"
-wallet = "/home/ezy/.config/solana/id.json"
+wallet = "~/.config/solana/id.json"
+
+[programs.localnet]
+my_program = "BooManQtsP9pBNudF2HDGNT9xkjL63BiWVWpfkvLkmQW"
+
+[programs.devnet]
+my_program = "BooManQtsP9pBNudF2HDGNT9xkjL63BiWVWpfkvLkmQW"
+
+[programs.mainnet]
+my_program = "BooManQtsP9pBNudF2HDGNT9xkjL63BiWVWpfkvLkmQW"
 
 [scripts]
 test = "mocha -t 1000000 tests/"

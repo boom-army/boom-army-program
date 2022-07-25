@@ -1,12 +1,12 @@
 [package]
-name = "sosol"
+name = "boom"
 version = "0.2.0"
 description = "Created with Anchor"
 edition = "2018"
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "sosol"
+name = "boom"
 
 [features]
 no-entrypoint = []

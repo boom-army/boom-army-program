@@ -1,14 +1,14 @@
-//! Sosol interaction
+//! Boom interaction
 
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, TokenAccount, Transfer};
 use std::convert::Into;
 use percentage::Percentage;
 
-declare_id!("8Ea7iXE3UstZTtH8EfkvQRSHsn2KF76Z3wx4kbdtqrjN");
+declare_id!("BooManQtsP9pBNudF2HDGNT9xkjL63BiWVWpfkvLkmQW");
 
 #[program]
-pub mod sosol {
+pub mod boom {
     use super::*;
 
     pub fn interaction(_ctx: Context<Interaction>, interaction_fee: u64) -> Result<()> {
@@ -73,6 +73,20 @@ pub struct Interaction<'info> {
 pub enum ContractError {
     #[msg("The token account doesn't have enough funds to make this transaction.")]
     NotEnoughTokens
+}
+
+#[macro_export]
+macro_rules! security_txt {
+    ($($name:ident: $value:expr),*) => {
+        #[cfg_attr(target_arch = "bpf", link_section = ".security.txt")]
+        #[allow(dead_code)]
+        #[no_mangle]
+        pub static security_txt: &str = concat! {
+            "=======BEGIN SECURITY.TXT V1=======\0",
+            $(stringify!($name), "\0", $value, "\0",)*
+            "=======END SECURITY.TXT V1=======\0"
+        };
+    };
 }
 
 security_txt! {
