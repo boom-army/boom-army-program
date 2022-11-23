@@ -89,6 +89,7 @@ macro_rules! security_txt {
     };
 }
 
+#[cfg(not(feature = "no-entrypoint"))]
 security_txt! {
     name: "Boom.Army",
     project_url: "https://boom.army",
